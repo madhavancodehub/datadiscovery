@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
+agent_class: SequentialAgent
+name: DataDiscoveryRouter
+description: A multi-agent routing pipeline that discovers assets, plans queries, executes them, and builds a synthesized context narrative.
+sub_agents:
+  - config_path: asset_discovery.yaml
+  - config_path: query_planner.yaml
+  - config_path: data_retriever.yaml
+  - config_path: context_builder.yaml

@@ -24,3 +24,6 @@ def create_data_retriever_agent() -> Agent:
         instruction=raw_config.get("instruction", ""),
         tools=[mock_get_table_schema],
     )
+
+# Required by ADK web when this agent is selected standalone
+root_agent = create_data_retriever_agent()

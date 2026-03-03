@@ -22,3 +22,6 @@ def create_query_planner_agent() -> Agent:
         model=model,
         instruction=raw_config.get("instruction", ""),
     )
+
+# Required by ADK web when this agent is selected standalone
+root_agent = create_query_planner_agent()

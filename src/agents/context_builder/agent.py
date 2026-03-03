@@ -34,3 +34,6 @@ def create_context_builder_agent() -> Agent:
     )
 
     return agent
+
+# Required by ADK web when this agent is selected standalone
+root_agent = create_context_builder_agent()

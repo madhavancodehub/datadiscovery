@@ -24,3 +24,6 @@ def create_asset_discovery_agent() -> Agent:
         instruction=raw_config.get("instruction", ""),
         tools=[search_catalog],
     )
+
+# Required by ADK web when this agent is selected standalone
+root_agent = create_asset_discovery_agent()

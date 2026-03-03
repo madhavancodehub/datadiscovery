@@ -38,3 +38,25 @@ def mock_get_table_schema(project: str, dataset: str, table: str) -> str:
         })
     }
     return mock_db.get(table, json.dumps({"fields": []}))
+
+def run_query(sql: str) -> str:
+    """
+    Mock function representing BigQuery query execution.
+    Used by the DataRetriever agent to execute a SQL query and return results.
+    In production this would call the BigQuery client API.
+    Returns a JSON string containing columns, rows, and metadata.
+    """
+    # Return mock result data that matches the sales + users schema
+    mock_result = {
+        "columns": ["region", "total_sales", "active_users"],
+        "rows": [
+            {"region": "North America", "total_sales": 142500.75, "active_users": 3820},
+            {"region": "Europe",        "total_sales": 98300.50,  "active_users": 2145},
+            {"region": "Asia Pacific",  "total_sales": 76200.00,  "active_users": 1890},
+        ],
+        "row_count": 3,
+        "execution_time_ms": 312,
+        "error_message": None
+    }
+    return json.dumps(mock_result)
+

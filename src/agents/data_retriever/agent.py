@@ -1,7 +1,7 @@
 import os
 import yaml
 from google.adk.agents import Agent
-from src.tools.custom_tools import mock_get_table_schema
+from src.tools.custom_tools import mock_get_table_schema, run_query
 
 def create_data_retriever_agent() -> Agent:
     """
@@ -22,7 +22,7 @@ def create_data_retriever_agent() -> Agent:
         description=raw_config.get("description", ""),
         model=model,
         instruction=raw_config.get("instruction", ""),
-        tools=[mock_get_table_schema],
+        tools=[mock_get_table_schema, run_query],
     )
 
 # Required by ADK web when this agent is selected standalone

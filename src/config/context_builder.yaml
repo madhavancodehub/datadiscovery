@@ -1,5 +1,4 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/google/adk-python/refs/heads/main/src/google/adk/agents/config_schemas/AgentConfig.json
-agent_class: LlmAgent
 name: ContextBuilder
 description: Synthesizes the final analytical answer based on the retrieved data results.
 model: ${MODEL_ID}

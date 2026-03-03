@@ -1,13 +1,10 @@
 import os
-import json
 from dotenv import load_dotenv
 
 # Load environment variables early
 load_dotenv()
 
 from google.adk.agents.sequential_agent import SequentialAgent
-from google.adk.agents.callback_context import CallbackContext
-from google.adk.models.llm_response import LlmResponse
 
 from src.agents.asset_discovery.agent import create_asset_discovery_agent
 from src.agents.query_planner.agent import create_query_planner_agent

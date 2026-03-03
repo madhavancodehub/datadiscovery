@@ -37,7 +37,7 @@ class PromptPackage(BaseModel):
     confidence_score: float = Field(description="Confidence score of the answer from 0.0 to 1.0")
 
 class RoutingState(BaseModel):
-    """The central state object passed through the LangGraph agents."""
+    """The central state object passed through the ADK multi-agent pipeline."""
     user_query: str
     asset_bundle: Optional[AssetBundle] = None
     query_plan: Optional[QueryPlan] = None

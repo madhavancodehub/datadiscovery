@@ -1,8 +1,7 @@
 import os
 import yaml
 from google.adk.agents import Agent
-from google.adk.agents.llm_agent_config import LlmAgentConfig
-from google.genai import types
+from google.adk.tools import google_search
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.models.llm_response import LlmResponse
 
@@ -13,26 +12,25 @@ def logging_callback(callback_context: CallbackContext, llm_response: LlmRespons
 
 def create_context_builder_agent() -> Agent:
     """
-    Creates the ContextBuilder agent natively from the ADK YAML config,
-    and binds grounding and callbacks.
+    Creates the ContextBuilder agent, loading its prompt from the YAML config,
+    and binding grounding and callbacks.
     """
     config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "config", "context_builder.yaml"))
-    
+
     with open(config_path, "r", encoding="utf-8") as f:
         raw_config = yaml.safe_load(f)
-        
-    if raw_config.get("model") == "${MODEL_ID}":
-        raw_config["model"] = os.getenv("MODEL_ID", "gemini-1.5-pro")
-        
-    config = LlmAgentConfig.parse_obj(raw_config)
-    agent = Agent.from_config(config=config, config_abs_path=config_path)
-    
-    # Attach Grounding natively (Feature 13)
-    agent.generate_content_config = types.GenerateContentConfig(
-        tools=[types.Tool(google_search=types.GoogleSearch())],
+
+    model = os.getenv("MODEL_ID", "gemini-1.5-pro")
+    if raw_config.get("model") not in (None, "${MODEL_ID}"):
+        model = raw_config["model"]
+
+    agent = Agent(
+        name=raw_config["name"],
+        description=raw_config.get("description", ""),
+        model=model,
+        instruction=raw_config.get("instruction", ""),
+        tools=[google_search],
+        after_model_callback=logging_callback,
     )
-    
-    # Attach explicit callbacks (Feature 10)
-    agent.after_model_callback = logging_callback
-    
+
     return agent

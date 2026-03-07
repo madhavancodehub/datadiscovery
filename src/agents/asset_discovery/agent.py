@@ -1,12 +1,16 @@
 import os
 import yaml
 from google.adk.agents import Agent
-from src.tools.mock_mcp_server import search_catalog
+from src.agents.dataplex_expert.agent import create_dataplex_expert_agent
+
 
 def create_asset_discovery_agent() -> Agent:
     """
-    Creates the AssetDiscovery agent, loading its prompt from the YAML config
-    and binding the required Python tools.
+    Creates the AssetDiscovery agent, loading its prompt from the YAML config.
+
+    Catalog searches are delegated to the DataplexExpert sub-agent, which
+    connects to the Dataplex Universal Catalog MCP server via stdio transport.
+    Adding a new catalog is as simple as adding a new expert sub-agent here.
     """
     config_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "config", "asset_discovery.yaml"))
 
@@ -17,13 +21,16 @@ def create_asset_discovery_agent() -> Agent:
     if raw_config.get("model") not in (None, "${MODEL_ID}"):
         model = raw_config["model"]
 
-    return Agent(
+    dataplex_expert = create_dataplex_expert_agent()
+
+    agent = Agent(
         name=raw_config["name"],
         description=raw_config.get("description", ""),
         model=model,
         instruction=raw_config.get("instruction", ""),
-        tools=[search_catalog],
+        sub_agents=[dataplex_expert],
     )
+    return agent
 
 # Required by ADK web when this agent is selected standalone
 root_agent = create_asset_discovery_agent()
